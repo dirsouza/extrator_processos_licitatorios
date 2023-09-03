@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongodb-extractor:
+    image: mongo:latest
+    container_name: mongodb-extractor
+    restart: always
+    ports:
+      - $MONGO_DB_PORT:27017
+    volumes:
+      - mongo-data:/data/db
+
+  redis-extractor:
+    image: redis:7-alpine
+    container_name: redis-extractor
+    command: redis-server --save 60 1 --loglevel warning --appendonly yes
+    restart: always
+    ports:
+      - $REDIS_PORT:6379
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  mongo-data:
